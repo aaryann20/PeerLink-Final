@@ -237,7 +237,30 @@ classDiagram
 │  (File Sender)        Direct File Transfer       (File Receiver)│
 └─────────────────────────────────────────────────────────────────┘
 ```
+###SequenceDiagram
+```
+    participant User1 as Uploader
+    participant Frontend as Next.js UI
+    participant Nginx as Nginx Proxy
+    participant Backend as Java Server
+    participant Disk as Lightsail Disk
 
+    Uploader->>Frontend: Selects file to upload
+    Frontend->>Nginx: POST /upload (file)
+    Nginx->>Backend: Forwards request
+    Backend->>Disk: Saves file
+    Backend->>Frontend: Returns invite code (port)
+    Frontend->>Uploader: Shows invite code
+
+    participant User2 as Downloader
+    User2->>Frontend: Enters invite code
+    Frontend->>Nginx: GET /download/{port}
+    Nginx->>Backend: Forwards request
+    Backend->>Disk: Reads file
+    Backend->>Frontend: Streams file
+    Frontend->>User2: Downloads file
+    ```
+    
 ### Class Relationships
 
 ```
